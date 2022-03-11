@@ -1,5 +1,5 @@
 {
-  "name": "imx-frontend-minting-dapp",
+  "name": "imx-dapp-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
