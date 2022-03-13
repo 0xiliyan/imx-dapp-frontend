@@ -1,18 +1,12 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {ethers} from "ethers";
 import styled, {css} from 'styled-components';
-
-const Section = styled.div`
-    margin-bottom: 10px;
-`
-
-const Button = styled.button`
-    margin-right: 10px;
-`
+import GlobalStyles from "./globalStyles";
 
 const ErrorMessage = styled.div`
     color: #ff0000;
     margin-bottom: 10px;
+    font-size: 20px;
 `
 
 const ConnectWallet = styled.div`
@@ -20,23 +14,73 @@ const ConnectWallet = styled.div`
 `
 
 const MintContainer = styled.div`
-    max-width: 300px;
     margin: 30px auto;
+    text-align: center;
 `
 
 const ConnectWalletButton = styled.button`
-    background: #0983e5;
+    background: #f900ff;
     color: #fff;
-    padding: 5px 20px;
+    padding: 10px 25px;
     border: 0px;
-    border-radius: 3px;
-    margin-top: 15px;
+    font-size: 21px;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    background: ${props => props.background};
+    color: ${props => props.color};    
 `
 
 const MintButton = styled(ConnectWalletButton)`
+    margin-top: 30px;
+`
+
+const WalletConnected = styled.div`
+    font-size: 22px;
+`
+
+const CurrentPrice = styled.div`
+    font-size: 32px;
+    margin: 30px;
+`
+
+const CollectionLogo = styled.img`
+    ${props => props.width && `
+        max-width: ${props.width};
+    `};
+`
+
+const SelectMintsForUser = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100px;
+    margin: auto;
+   
+`
+
+const RemoveMint = styled.div`
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${props => props.background};
+    color: ${props => props.color};
+    font-size: 25px;
+    cursor: pointer;
+`
+
+const AddMint = styled(RemoveMint)`
+    
+`
+
+const MintsForUser = styled.div`
+    font-size: 30px;
 `
 
 const App = () => {
+    // collection configuration
     const mintCost = 0.04;
     const maxMintsForUser = 2;
     const whitelistedAddresses = [
@@ -47,7 +91,15 @@ const App = () => {
     const endSaleAtDepositAmount = 0; // leave this to 0 for no limit
     const isMintingEnabled = true;
     const whitelistOnly = false;
-    const isRopsten = false;
+    const isRopsten = true;
+
+    // styling configuration
+    const logoMaxWidth = '330px';
+    const backgroundColor = '#070D2B';
+    const textColor = '#6BF6F0';
+    const buttonBackgroundColor = '#f900ff';
+    const buttonColor = '#FFFFFF';
+
 
     const [mintsForUser, setMintsForUser] = useState(1);
 
@@ -113,6 +165,22 @@ const App = () => {
         setSignerAddress();
     }
 
+    const decreaseMintsForUser = () => {
+        const newMintsForUser = mintsForUser -1;
+
+        if (newMintsForUser >= 1) {
+            setMintsForUser(newMintsForUser);
+        }
+    }
+
+    const increaseMintsForUser = () => {
+        const newMintsForUser = mintsForUser + 1;
+
+        if (newMintsForUser <= maxMintsForUser) {
+            setMintsForUser(newMintsForUser);
+        }
+    }
+
     const displayAddress = (address) => {
         return `${address.substr(0, 7)}...${address.substr(-5)}`;
     }
@@ -164,34 +232,24 @@ const App = () => {
 
     return (
         <MintContainer>
-                <div>
-                    <div>
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
-                    <div><h2>Mint an NFT</h2></div>
-                    <ConnectWallet>
-                        {signerAddress ?
-                            <div>
-                                <span>{displayAddress(signerAddress)}</span>
-                            </div> :
-                            <div>
-                                <div onClick={connectWallet}>
-                                    <ConnectWalletButton>Connect</ConnectWalletButton>
-                                </div>
-                            </div>
-                        }
-                    </ConnectWallet>
-                    <div className="summonSecText">1 NFT costs {mintCost} ETH</div>
-                    <div className="summonSecOptions">
-                        <label onClick={() => setMintsForUser(1)}><input type="radio" value="1" />1 NFT</label>
-                        <label onClick={() => setMintsForUser(2)}><input type="radio" value="2" />2 NFTS</label>
-                    </div>
-                    {mintingEnabled && signer &&
-                        <div className="summonSecButton" onClick={mint}>
-                            <MintButton>Mint</MintButton>
-                        </div>
-                    }
-                </div>
-            </div>
+            <GlobalStyles background={backgroundColor} color={textColor} />
+            {error && <ErrorMessage>{error}</ErrorMessage>}
+            <CollectionLogo src="/images/logo.png" width={logoMaxWidth} />
+            <ConnectWallet>
+                {signerAddress ?
+                    <WalletConnected>{displayAddress(signerAddress)}</WalletConnected> :
+                    <ConnectWalletButton onClick={connectWallet}  background={buttonBackgroundColor} color={buttonColor}>CONNECT WALLET</ConnectWalletButton>
+                }
+            </ConnectWallet>
+            <CurrentPrice>CURRENT PRICE: {mintCost} ETH</CurrentPrice>
+            <SelectMintsForUser>
+                <RemoveMint onClick={decreaseMintsForUser} background={buttonBackgroundColor} color={buttonColor}>-</RemoveMint>
+                <MintsForUser>{mintsForUser}</MintsForUser>
+                <AddMint onClick={increaseMintsForUser} background={buttonBackgroundColor} color={buttonColor}>+</AddMint>
+            </SelectMintsForUser>
+            {mintingEnabled && signer &&
+                <MintButton onClick={mint} background={buttonBackgroundColor} color={buttonColor}>MINT</MintButton>
+            }
         </MintContainer>
     );
 }
