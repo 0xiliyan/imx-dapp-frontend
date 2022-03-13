@@ -22,13 +22,16 @@ Ready-to-deploy Solidity contract, necessary for integration with ImmutableX.
     
 ## Installation    
 1) Install all necessary project dependencies from `package.json`:    
-    
-```npm install ```     
+
+```bash
+npm install 
+```
 
 2) Compile the application:
 
-```npm run start ```     
-
+```bash
+npm run start 
+```
 
  ## Configuration    
 There is a sample theme for the frontend minting dapp which is completely configurable:
@@ -87,4 +90,6 @@ After compiling the application you can deploy the `build` folder to any hosting
 
 To compile the bundle, execute the following command in your terminal:
 
-```npm run build ```     
+```bash
+npm run build     
+```
