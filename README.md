@@ -25,9 +25,10 @@ Ready-to-deploy Solidity contract, necessary for integration with ImmutableX.
     
 ```npm install ```     
 
-2) Compile the application
+2) Compile the application:
 
-```npm start ```     
+```npm run start ```     
+
 
  ## Configuration    
 There is a sample theme for the frontend minting dapp which is completely configurable:

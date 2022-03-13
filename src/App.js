@@ -60,8 +60,8 @@ const SelectMintsForUser = styled.div`
 `
 
 const RemoveMint = styled.div`
-    height: 30px;
-    width: 30px;
+    height: 38px;
+    width: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
